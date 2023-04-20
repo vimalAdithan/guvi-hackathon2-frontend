@@ -29,7 +29,6 @@ export function CartItems({ itms, setAmount, amount }) {
     }
     setOpen(false);
   };
-
   const [value, setValue] = React.useState(dayjs());
   const [value1, setValue1] = React.useState(dayjs().add(1, "hour"));
   const [num, setNum] = React.useState(0);

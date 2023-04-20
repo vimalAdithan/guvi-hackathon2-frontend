@@ -16,7 +16,6 @@ export function UserEdit() {
   }, []);
   return items ? <Checkout items={items} /> : <h1>Loading...</h1>;
 }
-
 function Checkout({ items }) {
   const navigate = useNavigate();
   const [amount, setAmount] = useState(0);
