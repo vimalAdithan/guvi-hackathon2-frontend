@@ -17,9 +17,31 @@ export function UserEdit() {
   return items ? <Checkout items={items} /> : <h1>Loading...</h1>;
 }
 
-
 function Checkout({ items }) {
   const navigate = useNavigate();
+  const [amount, setAmount] = useState(0);
+  const razor = () => {
+    if (amount == 0) {
+      alert("amount is zero");
+    } else {
+      var options = {
+        key: "rzp_test_485xBrfBtJL1Mb",
+        key_secret: "0Knbl7LYIXpc5FfxN4gA3yLD",
+        amount:amount*100,
+        currency:"INR",
+        name:"HeavyRentals",
+        description:"Payment",
+        handler:function(response){
+          alert(response.razor_payment_id)
+        },
+        theme:{
+          color:"#3399cc"
+        }
+      };
+      var pay=new window.Razorpay(options);
+      pay.open()
+    }
+  };
   // const [items, setItems] = useState([
   //   {
   //     id: "1",
@@ -72,7 +94,13 @@ function Checkout({ items }) {
   //   }).then(() => getCard());
   // };
   return (
-    <div style={{ display: "grid" }}>
+    <div
+      style={{
+        display: "grid",
+        fontFamily:
+          "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif",
+      }}
+    >
       <div className="checkout">
         <p>CHECKOUT PAGE</p>
       </div>
@@ -81,15 +109,22 @@ function Checkout({ items }) {
           {items
             .filter((itms) => itms.status == false)
             .map((itms) => (
-              <CartItems key={itms.id} itms={itms} />
+              <CartItems
+                key={itms._id}
+                itms={itms}
+                setAmount={setAmount}
+                amount={amount}
+              />
             ))}
         </div>
+        <p>Total amount: {amount}</p>
       </Container>
       <Button
         className="bitem"
         sx={{ margin: "10px 10px" }}
         size="small"
         variant="contained"
+        onClick={() => razor()}
       >
         Checkout
       </Button>
@@ -106,8 +141,3 @@ function Checkout({ items }) {
     </div>
   );
 }
-
-
-
-
-

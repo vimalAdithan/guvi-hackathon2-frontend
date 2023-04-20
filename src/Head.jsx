@@ -15,13 +15,13 @@ import CallIcon from "@mui/icons-material/Call";
 import MailIcon from "@mui/icons-material/Mail";
 import { Items } from "./Items";
 
-
 export function Head() {
   const navigate = useNavigate();
-  const [cart, setCart] = useState(0);
+  // const [cart, setCart] = useState(0);
   const [items, setItems] = useState([]);
   const [available, setAvailable] = useState(true);
   const [search, setSearch] = useState("");
+  const coun = items.filter((itms) => itms.status == false).length;
   const getCard = () => {
     fetch(`${API}/cart`)
       .then((data) => data.json())
@@ -41,7 +41,6 @@ export function Head() {
   //     method: "DELETE",
   //   }).then(() => getCard());
   // };
-
   return (
     <div>
       <div className="nav">
@@ -76,7 +75,7 @@ export function Head() {
             // startIcon={<ShoppingCartIcon />}
             startIcon={
               <Badge
-                badgeContent={cart}
+                badgeContent={coun}
                 color="primary"
                 sx={{ margin: "0px 5px" }}
               >
@@ -114,14 +113,19 @@ export function Head() {
       <Container fixed>
         <div className="list">
           {items.map((itms) => (
-            <Items key={itms.id} itms={itms} cart={cart} setCart={setCart} />
+            <Items key={itms._id} itms={itms} />
           ))}
         </div>
       </Container>
+       <div className="addbtn">
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => navigate("/add")}
+        >
+          Add Vehicle
+        </Button>
+      </div>
     </div>
   );
 }
-
-
-
-

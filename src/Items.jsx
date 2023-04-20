@@ -11,7 +11,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export function Items({ itms, cart, setCart }) {
+export function Items({ itms }) {
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(true);
@@ -29,22 +29,18 @@ export function Items({ itms, cart, setCart }) {
     const newCard = {
       status: !itms.status,
     };
-    fetch(`${API}/cart/${itms.id}`, {
+    fetch(`${API}/cart/${itms._id}`, {
       method: "PUT",
       body: JSON.stringify(newCard),
       headers: { "Content-Type": "application/json" },
     });
-    // fetch(`${API}/cart`, {
-    //   method: "POST",
-    //   body: JSON.stringify(newCard),
-    //   headers: { "Content-Type": "application/json" },
-    // });
+    location.reload("/");
   };
   return (
     <div className="card">
       <Card>
         <div className="item-img">
-          <img src={itms.image} alt="jcb" />
+          <img src={itms.image} alt={itms.name} />
         </div>
         <div>
           <p>{itms.name}</p>
@@ -69,9 +65,7 @@ export function Items({ itms, cart, setCart }) {
                 sx={{ margin: "10px 10px" }}
                 size="small"
                 variant="outlined"
-                onClick={() => (
-                  setCart(cart + 1), setShow(!show), addItem(), handleClick()
-                )}
+                onClick={() => (setShow(!show), addItem(), handleClick())}
               >
                 Add to Cart
               </Button>
