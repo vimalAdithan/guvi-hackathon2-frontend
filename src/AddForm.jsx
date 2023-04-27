@@ -29,7 +29,7 @@ export function AddForm() {
           headers: { "Content-Type": "application/json"},
         });
         console.log(JSON.stringify(e));
-        navigate("/");
+        navigate("/home");
       },
     });
 

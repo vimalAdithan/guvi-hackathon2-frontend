@@ -125,6 +125,13 @@ export function Head() {
         >
           Add Vehicle
         </Button>
+        <Button
+          variant="contained"
+          color="error"
+          onClick={() => navigate("/")}
+        >
+          BACK
+        </Button>
       </div>
     </div>
   );

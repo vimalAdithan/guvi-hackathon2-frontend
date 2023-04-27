@@ -128,7 +128,7 @@ function Checkout({ items }) {
         Checkout
       </Button>
       <Button
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/home")}
         className="bitem"
         sx={{ margin: "10px 10px", width: "30px" }}
         size="small"
