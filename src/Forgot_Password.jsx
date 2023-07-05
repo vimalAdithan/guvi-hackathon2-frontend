@@ -1,6 +1,7 @@
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useNavigate,NavLink } from "react-router-dom";
+import { useNavigate, NavLink, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import * as React from "react";
@@ -8,17 +9,21 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 
 const formValidationSchema = yup.object({
-  userid: yup.string().required().min(5),
-  password: yup.string().required().min(8),
+  password:yup.string().required().min(8),
+  repassword: yup
+    .string()
+    .required()
+    .oneOf([yup.ref("password"), null], "Passwords must match"),
 });
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export function Login() {
-  const navigate = useNavigate();
+export function Forgot_Password() {
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
+  const { id, token } = useParams();
   const handleClick = () => {
     setOpen(true);
   };
@@ -29,54 +34,55 @@ export function Login() {
     setOpen(false);
   };
 
+  const userValid = async () => {
+    const result = await fetch(
+      `https://sample-login-node.vercel.app/forgotpassword/${id}/${token}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    const data = await result.json();
+    if (data.status == 201) {
+      console.log("user valid");
+    } else {
+      navigate("/");
+    }
+  };
+  useEffect(() => {
+    userValid();
+  }, []);
   const { handleSubmit, handleChange, handleBlur, values, touched, errors } =
     useFormik({
       initialValues: {
-        userid: "",
         password: "",
+        repassword: "",
       },
       validationSchema: formValidationSchema,
-      onSubmit: async (e) => {        
-        const result = await fetch(
-          "https://sample-login-node.vercel.app/login",
-          {
-            method: "POST",
-            body: JSON.stringify({
-              username: e.userid,
-              password: e.password,
-            }),
-            headers:{ "Content-Type": "application/json"},
-          }
-        )
-        .then((data) => data);
-        if (result.status == 200) {
-          navigate("/home");
-        } 
-        else {
+      onSubmit: async (e) => {
+        console.log(e);
+        const result = await fetch(`https://sample-login-node.vercel.app/${id}/${token}`, {
+          method: "POST",
+          body: JSON.stringify(e),
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await result.json();
+        if (data.status == 201) {
+          navigate("/");
+        } else {
           handleClick();
         }
       },
     });
-
   return (
     <div style={{ padding: "80px 0" }}>
       <div></div>
       <div className="login-box">
-        <p>Log in to account</p>
+        <p>New Password</p>
         <form onSubmit={handleSubmit}>
           <TextField
-            name="userid"
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.userid}
-            label="Email Id"
-            variant="outlined"
-            size="small"
-          />
-          {touched.userid && errors.userid ? errors.userid : null}
-          <TextField
-            // id="outlined-basic"
             autoComplete="on"
+            id="password"
             label="password"
             variant="outlined"
             size="small"
@@ -87,17 +93,26 @@ export function Login() {
             value={values.password}
           />
           {touched.password && errors.password ? errors.password : null}
-          <div style={{textAlign:"center"}}>
-            <p style={{ display: "inline-block" }}>Don't have an account? <NavLink to="/signup">Sign Up</NavLink></p>
-            <p style={{ display: "inline-block" }}>Forgot Password <NavLink to="/reset">Click Here</NavLink></p>
-          </div>
+          <TextField
+            autoComplete="on"
+            id="repassword"
+            label="retype-password"
+            variant="outlined"
+            size="small"
+            type="password"
+            name="repassword"
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.repassword}
+          />
+          {touched.repassword && errors.repassword ? errors.repassword : null}
           <Button variant="contained" type="submit">
-            login
+            Send
           </Button>
         </form>
         <Snackbar open={open} anchorOrigin={{ vertical: "top", horizontal: "right" }} autoHideDuration={5000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-            Invalid credential
+            User name is already exist!
           </Alert>
         </Snackbar>
       </div>
