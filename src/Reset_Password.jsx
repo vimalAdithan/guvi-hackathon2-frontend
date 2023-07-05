@@ -44,6 +44,7 @@ export function Reset_Password() {
             method: "POST",
             body: JSON.stringify({
               username: e.userid,
+              link:"https://polite-lollipop-713e27.netlify.app"
             }),
             headers: { "Content-Type": "application/json" },
           }
