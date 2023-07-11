@@ -21,11 +21,13 @@ export function Head() {
   const [items, setItems] = useState([]);
   const [available, setAvailable] = useState(true);
   const [search, setSearch] = useState("");
-  const coun = items.filter((itms) => itms.status == false).length;
+const[count,setCount]=useState([])
+  const coun = count.filter((itms) => itms.status == false).length
   const getCard = () => {
     fetch(`${API}/cart`)
       .then((data) => data.json())
-      .then((res) => setItems(res));
+      .then((res) => {setItems(res),setCount(res)});
+      
   };
   useEffect(() => getCard(), []);
 
@@ -72,7 +74,6 @@ export function Head() {
           </Paper>
           <Button
             variant="outlined"
-            // startIcon={<ShoppingCartIcon />}
             startIcon={
               <Badge
                 badgeContent={coun}
@@ -86,10 +87,17 @@ export function Head() {
           >
             Cart
           </Button>
-          {available ? (
+        
+        </div>
+      </div>
+      <div className="title">
+        <h1>Heavy Truck Rentals</h1>
+      </div>
+      <div style={{display:"flex",flexDirection: "row-reverse"}}>
+      {available ? (
             <IconButton
               type="button"
-              sx={{ color: "black", margin: "0px 5px" }}
+              sx={{ color: "black", margin: "0px 20px" }}
               aria-label="filter"
               onClick={() => (filter(), setAvailable(!available))}
             >
@@ -98,17 +106,13 @@ export function Head() {
           ) : (
             <IconButton
               type="button"
-              sx={{ color: "black", margin: "0px 5px" }}
+              sx={{ color: "black", margin: "0px 20px" }}
               aria-label="filter"
               onClick={() => (getCard(), setAvailable(!available))}
             >
               <TuneIcon />
             </IconButton>
           )}
-        </div>
-      </div>
-      <div className="title">
-        <h1>Heavy Truck Rentals</h1>
       </div>
       <Container fixed>
         <div className="list">
