@@ -68,6 +68,14 @@ export function AddForm() {
         <Button variant="contained" size="small" color="success" type="submit">
           ADD
         </Button>
+        <Button
+          variant="contained"
+          size="small"
+          color="error"
+          onClick={() => navigate("/home")}
+        >
+          BACK
+        </Button>
       </form>
     </div>
   );

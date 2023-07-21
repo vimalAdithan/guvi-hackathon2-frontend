@@ -44,7 +44,7 @@ const[count,setCount]=useState([])
   //   }).then(() => getCard());
   // };
   return (
-    <div>
+    <div className="home">
       <div className="nav">
         <div className="info">
           <div style={{ display: "flex" }}>
